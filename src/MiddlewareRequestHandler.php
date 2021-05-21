@@ -2,15 +2,20 @@
 
 namespace pj\middleware;
 
-use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use UnexpectedValueException;
 
-class MiddlewareHandler implements RequestHandlerInterface
+final class MiddlewareRequestHandler implements RequestHandlerInterface
 {
+    public const MIDDLEWARES_ATTRIBUTE_NAME = 'middlewares';
+
     private RequestHandlerInterface $finalRequestHandler;
+
+    public static function create(): self
+    {
+        return new self(new EmptyResponseRequestHandler());
+    }
 
     public function __construct(RequestHandlerInterface $finalRequestHandler)
     {
@@ -19,19 +24,19 @@ class MiddlewareHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $middlewares = $request->getAttribute('middlewares');
-        if (!$middewares instanceof MiddlewareCollection) {
-            throw new UnexpectedValueException(
-                'MiddlewareCollection type expected in middleware attribute'
-            );
-        }
-        $middleware = current($middlewares);
+        $middlewares = $request->getAttribute(self::MIDDLEWARES_ATTRIBUTE_NAME);
+        $middleware = $this->getCurrentMiddleware($middlewares);
         $request->withAttribute(
-            'middlewares',
+            self::MIDDLEWARES_ATTRIBUTE_NAME,
             $middlewares->withoutCurrent()
         );
         return $middleware ?
             $middleware->process($request, $this) :
             $this->finalRequestHandler->handle($request);
+    }
+
+    private function getCurrentMiddleware(MiddlewareCollectionInterface $middlewareCollection)
+    {
+        return $middlewareCollection->getIterator()->current();
     }
 }

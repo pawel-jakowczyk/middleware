@@ -3,12 +3,11 @@
 namespace pj\middleware;
 
 use Psr\Http\Server\MiddlewareInterface;
-use IteratorAggregate;
 use Generator;
 
-class MiddlewareCollection implements IteratorAggregate
+final class MiddlewareCollection implements MiddlewareCollectionInterface
 {
-    private MiddlewareInterface $middlewares;
+    private array $middlewares;
 
     public function __construct(MiddlewareInterface ...$middlewares)
     {
@@ -17,12 +16,12 @@ class MiddlewareCollection implements IteratorAggregate
 
     public function getIterator(): Generator
     {
-        yield from $middewares;
+        yield from $this->middlewares;
     }
 
     public function withoutCurrent(): self
     {
         array_pop($this->middlewares);
-        return self(...$this->middlewares);
+        return new self(...$this->middlewares);
     }
 }
