@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace pj\middleware;
+namespace PJ\Middleware;
 
-use IteratorAggregate;
+use Psr\Http\Server\MiddlewareInterface;
 
-interface MiddlewareCollectionInterface extends IteratorAggregate
+interface MiddlewareCollectionInterface
 {
-    public function withoutCurrent(): self;
+    public function count(): int;
+
+    public function getFirstMiddleware(): MiddlewareInterface;
+
+    public function withoutFirst(): self;
 }

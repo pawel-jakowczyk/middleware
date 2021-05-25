@@ -1,6 +1,8 @@
 <?php
 
-namespace pj\middleware;
+declare(strict_types=1);
+
+namespace PJ\Middleware;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -8,35 +10,19 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 final class MiddlewareRequestHandler implements RequestHandlerInterface
 {
-    public const MIDDLEWARES_ATTRIBUTE_NAME = 'middlewares';
-
-    private RequestHandlerInterface $finalRequestHandler;
-
-    public static function create(): self
-    {
-        return new self(new EmptyResponseRequestHandler());
-    }
-
-    public function __construct(RequestHandlerInterface $finalRequestHandler)
-    {
-        $this->finalRequestHandler = $finalRequestHandler;
-    }
-
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $middlewares = $request->getAttribute(self::MIDDLEWARES_ATTRIBUTE_NAME);
-        $middleware = $this->getCurrentMiddleware($middlewares);
-        $request->withAttribute(
-            self::MIDDLEWARES_ATTRIBUTE_NAME,
-            $middlewares->withoutCurrent()
-        );
-        return $middleware ?
-            $middleware->process($request, $this) :
-            $this->finalRequestHandler->handle($request);
+        $middlewareRequest = new MiddlewareRequest($request);
+        return $middlewareRequest->countMiddlewares() ?
+            $this->processNextMiddleware($middlewareRequest):
+            $middlewareRequest->getRequestHandler()->handle($request);
     }
 
-    private function getCurrentMiddleware(MiddlewareCollectionInterface $middlewareCollection)
+    private function processNextMiddleware(MiddlewareRequest $middlewareRequest): ResponseInterface
     {
-        return $middlewareCollection->getIterator()->current();
+        return $middlewareRequest->getFirstMiddleware()->process(
+            $middlewareRequest->getRequestWithoutFirstMiddleware(),
+            $this
+        );
     }
 }

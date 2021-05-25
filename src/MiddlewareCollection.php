@@ -1,9 +1,11 @@
 <?php
 
-namespace pj\middleware;
+declare(strict_types=1);
+
+namespace PJ\Middleware;
 
 use Psr\Http\Server\MiddlewareInterface;
-use Generator;
+use RuntimeException;
 
 final class MiddlewareCollection implements MiddlewareCollectionInterface
 {
@@ -14,14 +16,27 @@ final class MiddlewareCollection implements MiddlewareCollectionInterface
         $this->middlewares = $middlewares;
     }
 
-    public function getIterator(): Generator
+    public function count(): int
     {
-        yield from $this->middlewares;
+        return count($this->middlewares);
     }
 
-    public function withoutCurrent(): self
+    public function getFirstMiddleware(): MiddlewareInterface
     {
-        array_pop($this->middlewares);
-        return new self(...$this->middlewares);
+        return current($this->middlewares) ?: $this->throwEmptyException();
+    }
+
+    public function withoutFirst(): self
+    {
+        $middlewares = $this->middlewares;
+        array_shift($middlewares);
+        return new self(...$middlewares);
+    }
+
+    private function throwEmptyException(): void
+    {
+        throw new RuntimeException(
+            'Middleware collection is empty, please use count method before retrieving from collection'
+        );
     }
 }
