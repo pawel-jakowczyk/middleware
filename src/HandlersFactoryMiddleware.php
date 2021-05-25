@@ -20,10 +20,10 @@ class HandlersFactoryMiddleware implements MiddlewareInterface
         $factory = $this->getFactoryFromRequest($request);
         return $handler->handle(
             $request->withAttribute(
-                MIDDLEWARES_ATTRIBUTE_NAME,
+                AttributeNames::MIDDLEWARES,
                 $factory->createMiddlewares()
             )->withAttribute(
-                HANDLER_ATTRIBUTE_NAME,
+                AttributeNames::HANDLER,
                 $factory->createRequestHandler()
             )
         );
@@ -31,6 +31,6 @@ class HandlersFactoryMiddleware implements MiddlewareInterface
 
     private function getFactoryFromRequest(ServerRequestInterface $request): HandlersFactory
     {
-        return $request->getAttribute(HANDLERS_FACTORY_ATTRIBUTE_NAME);
+        return $request->getAttribute(AttributeNames::HANDLERS_FACTORY);
     }
 }

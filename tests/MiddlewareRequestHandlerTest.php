@@ -7,6 +7,7 @@ namespace PJ\Middleware\Tests;
 use Laminas\Diactoros\ServerRequest;
 use Nyholm\Psr7\Response;
 use Nyholm\Psr7\Stream;
+use PJ\Middleware\AttributeNames;
 use PJ\Middleware\MiddlewareCollection;
 use PJ\Middleware\MiddlewareCollectionInterface;
 use PJ\Middleware\MiddlewareRequestHandler;
@@ -16,8 +17,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TypeError;
-use const PJ\Middleware\MIDDLEWARES_ATTRIBUTE_NAME;
-use const PJ\Middleware\HANDLER_ATTRIBUTE_NAME;
 
 class MiddlewareRequestHandlerTest extends TestCase
 {
@@ -38,7 +37,7 @@ class MiddlewareRequestHandlerTest extends TestCase
         $this->expectException(TypeError::class);
         $request = (new ServerRequest())
             ->withAttribute(
-                MIDDLEWARES_ATTRIBUTE_NAME,
+                AttributeNames::MIDDLEWARES,
                 new MiddlewareCollection()
             );
         $this->handleRequest($request);
@@ -91,10 +90,10 @@ class MiddlewareRequestHandlerTest extends TestCase
 
         return (new ServerRequest())
             ->withAttribute(
-                MIDDLEWARES_ATTRIBUTE_NAME,
+                AttributeNames::MIDDLEWARES,
                 $middlewareCollection
             )->withAttribute(
-                HANDLER_ATTRIBUTE_NAME,
+                AttributeNames::HANDLER,
                 $requestHandler
             );
     }

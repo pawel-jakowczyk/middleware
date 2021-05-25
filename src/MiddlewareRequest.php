@@ -8,9 +8,6 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-const MIDDLEWARES_ATTRIBUTE_NAME = 'middlewares';
-const HANDLER_ATTRIBUTE_NAME = 'handler';
-
 /**
  * @internal
  */
@@ -23,8 +20,8 @@ final class MiddlewareRequest
     public function __construct(ServerRequestInterface $request)
     {
         $this->request = $request;
-        $this->middlewares = $request->getAttribute(MIDDLEWARES_ATTRIBUTE_NAME);
-        $this->requestHandler = $request->getAttribute(HANDLER_ATTRIBUTE_NAME);
+        $this->middlewares = $request->getAttribute(AttributeNames::MIDDLEWARES);
+        $this->requestHandler = $request->getAttribute(AttributeNames::HANDLER);
     }
 
     public function countMiddlewares(): int
@@ -45,7 +42,7 @@ final class MiddlewareRequest
     public function getRequestWithoutFirstMiddleware(): ServerRequestInterface
     {
         return $this->request->withAttribute(
-            MIDDLEWARES_ATTRIBUTE_NAME,
+            AttributeNames::MIDDLEWARES,
             $this->middlewares->withoutFirst()
         );
     }

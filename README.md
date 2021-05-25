@@ -14,22 +14,21 @@ The middlewares collection and request handler need to be set in server request 
 
 use Laminas\Diactoros\Response;
 use Laminas\Diactoros\ServerRequest;
+use PJ\Middleware\AttributeNames;
 use PJ\Middleware\MiddlewareRequestHandler;
 use PJ\Middleware\MiddlewareCollection;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use const PJ\Middleware\MIDDLEWARES_ATTRIBUTE_NAME;
-use const PJ\Middleware\HANDLER_ATTRIBUTE_NAME;
 
 (new MiddlewareRequestHandler())->handle(
     (new ServerRequest())
         ->withAttribute(
-            MIDDLEWARES_ATTRIBUTE_NAME,
+            AttributeNames::MIDDLEWARES,
             new MiddlewareCollection()
         )
         ->withAttribute(
-            HANDLER_ATTRIBUTE_NAME,
+            AttributeNames::HANDLER,
             new class () implements RequestHandlerInterface {
                 public function handle(ServerRequestInterface $request) : ResponseInterface{
                     return new Response();
