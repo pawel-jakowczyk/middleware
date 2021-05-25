@@ -25,6 +25,6 @@ class MiddlewareHandler implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $this->middleware->process($request, $this->requestHandler);
+        return $this->middleware->process($request, $this->requestHandler);
     }
 }
