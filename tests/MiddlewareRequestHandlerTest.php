@@ -6,19 +6,16 @@ namespace PJ\Middleware\Tests;
 
 use Laminas\Diactoros\ServerRequest;
 use Nyholm\Psr7\Response;
-use Nyholm\Psr7\Stream;
 use PJ\Middleware\AttributeNames;
 use PJ\Middleware\MiddlewareCollection;
 use PJ\Middleware\MiddlewareCollectionInterface;
 use PJ\Middleware\MiddlewareRequestHandler;
-use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use TypeError;
 
-class MiddlewareRequestHandlerTest extends TestCase
+class MiddlewareRequestHandlerTest extends HandlerBaseTestCase
 {
     /**
      * @test
@@ -96,25 +93,5 @@ class MiddlewareRequestHandlerTest extends TestCase
                 AttributeNames::HANDLER,
                 $requestHandler
             );
-    }
-
-    private function createMiddleware(string $name): MiddlewareInterface
-    {
-        return new class ($name) implements MiddlewareInterface
-        {
-            private string $name;
-
-            public function __construct(string $name)
-            {
-                $this->name = $name;
-            }
-
-            public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
-            {
-                $response = $handler->handle($request);
-                $response = $response->withBody(Stream::create($response->getBody() . $this->name . ' '));
-                return $response;
-            }
-        };
     }
 }
