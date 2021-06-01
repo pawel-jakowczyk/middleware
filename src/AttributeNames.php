@@ -9,5 +9,6 @@ final class AttributeNames
 {
     const MIDDLEWARES = 'middlewares';
     const HANDLER = 'handler';
-    const HANDLERS_FACTORY = 'handlers_factory';
+    const HANDLER_FACTORY = 'handlers_factory';
+    const MIDDLEWARE_FACTORY = 'middleware_factory';
 }

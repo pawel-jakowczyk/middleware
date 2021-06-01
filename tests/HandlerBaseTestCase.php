@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class HandlerBaseTestCase extends TestCase
+abstract class HandlerBaseTestCase extends TestCase
 {
     protected function createMiddleware(string $name): MiddlewareInterface
     {

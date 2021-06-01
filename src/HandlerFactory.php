@@ -6,9 +6,7 @@ namespace PJ\Middleware;
 
 use Psr\Http\Server\RequestHandlerInterface;
 
-interface HandlersFactory
+interface HandlerFactory
 {
-    public function createMiddlewares(): MiddlewareCollectionInterface;
-
     public function createRequestHandler(): RequestHandlerInterface;
 }
