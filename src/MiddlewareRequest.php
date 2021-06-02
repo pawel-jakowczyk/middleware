@@ -46,5 +46,4 @@ final class MiddlewareRequest
             $this->middlewares->withoutFirst()
         );
     }
-
 }

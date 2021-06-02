@@ -6,7 +6,7 @@ namespace PJ\Middleware;
 
 use Symfony\Component\Routing\Route;
 
-class MiddlewareRoute extends Route
+final class MiddlewareRoute extends Route
 {
     public function __construct(
         HandlerFactory $handlerFactory,
