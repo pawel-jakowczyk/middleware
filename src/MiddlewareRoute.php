@@ -8,7 +8,10 @@ use Symfony\Component\Routing\Route;
 
 final class MiddlewareRoute extends Route
 {
+    private string $name;
+
     public function __construct(
+        string $name,
         HandlerFactory $handlerFactory,
         MiddlewareFactory $middlewareFactory,
         string $path,
@@ -20,7 +23,7 @@ final class MiddlewareRoute extends Route
         $methods = [],
         ?string $condition = ''
     ) {
-
+        $this->name = $name;
         parent::__construct(
             $path,
             array_merge(
@@ -37,5 +40,10 @@ final class MiddlewareRoute extends Route
             $methods,
             $condition
         );
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
     }
 }
