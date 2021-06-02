@@ -1,5 +1,7 @@
 # PJ Middleware Request Handler
 
+[![Tests](https://github.com/pawel-jakowczyk/middleware/actions/workflows/php.yml/badge.svg)](https://github.com/pawel-jakowczyk/middleware/actions/workflows/php.yml)
+
 This repository holds the MiddlewareFactoryRequestHandler which implements the Psr\Http\Server\RequestHandlerInterface.
 The request handler is responsible for processing the collection of middlewares and final request handler.
 
