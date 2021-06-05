@@ -1,7 +1,7 @@
 {
     "name": "pawel-jakowczyk/middleware",
     "type": "library",
-    "description": "",
+    "description": "The request handler responsible for processing middlewares",
     "license": "MIT",
     "require": {
         "psr/http-server-handler": "^1.0",
